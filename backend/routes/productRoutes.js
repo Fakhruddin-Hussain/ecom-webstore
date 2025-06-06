@@ -1,10 +1,11 @@
 const express =require('express');
 const router = express.Router();
 const Product= require('../models/Product');
+const { authenticate, authorize } = require('../middleware/auth');
 
 // create product
 
-router.post('/', async(req, res)=>{
+router.post('/',authenticate, authorize('admin'),  async(req, res)=>{
     try{
         const product =new Product(req.body);
         await product.save();

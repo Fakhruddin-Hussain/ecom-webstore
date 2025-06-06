@@ -35,10 +35,10 @@ const AddProduct = () => {
   const handleSubmit= async (e)=>{
     e.preventDefault();
     try{
-      await axios.post("http://localhost:5002/api/products",formData);
+      await axios.post("http://localhost:5002/api/products",formData, {headers:{Authorization: `Bearer ${localStorage.getItem('token')}`}});
       alert('Product Added Successfully');
     }catch(err){
-      console.err("Error Adding Product: ",err)
+      console.error("Error Adding Product: ",err)
     }
   };
 

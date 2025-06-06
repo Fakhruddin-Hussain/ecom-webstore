@@ -2,18 +2,25 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const productRoutes = require('./routes/productRoutes');
+const authRoutes = require('./routes/authRoutes');
+const connectToMongo = require('./connectToMongo');
 
 const app = express();
 const PORT = 5002;
 
-app.use(cors());
 app.use(express.json());
+app.use(cors());
+app.use('/api/auth', authRoutes);
 app.use('/api/products', productRoutes);
+app.use('/api/users', authRoutes);
 
-mongoose.connect('mongodb+srv://fakhruddinhussain65:Mp1qNuJ2Xkje6G08@cluster-store.hvrmzh3.mongodb.net/?retryWrites=true&w=majority&appName=Cluster-store', {
-  useNewUrlParser: true,
-  useUnifiedTopology: true
-}).then(() => {
-  console.log('MongoDB connected');
+const startServer= async () => {
+  try{
+  await connectToMongo();
   app.listen(PORT, () => console.log(`Server running on http://localhost:${PORT}`));
-}).catch(err => console.error('MongoDB connection error:', err));
+  }catch(err){
+    console.log("Error Connecting: ",err)
+  }
+}
+
+startServer();
